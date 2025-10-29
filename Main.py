@@ -42,7 +42,7 @@ class ImageStitcher:
         self.OutputPathLabel.configure(text='Output Folder Path:')
         self.OutputPathLabel.pack(side='top')
         self.OutputPathEntry = ttk.Entry(self.OutputFrame)
-        _text_ = self.inputFolderPath
+        _text_ = self.outputFolderPath
         self.OutputPathEntry.delete('0', 'end')
         self.OutputPathEntry.insert('0', _text_)
         self.OutputPathEntry.pack(side='left')
@@ -85,7 +85,7 @@ class ImageStitcher:
         self.images = []
         for filename in sorted(os.listdir(self.inputFolderPath)):
             try:
-                im = Image.open(f"{self.inputFolderPath}/{filename}")
+                im = Image.open(os.path.join(self.inputFolderPath, filename))
                 print(f"Found {filename}")
                 self.images.append(im)
             except IOError:
@@ -116,8 +116,9 @@ class ImageStitcher:
 
             height_offset += img.height
 
-        print(self.outputFolderPath + "/Stitched.png")
-        new_img.save(self.outputFolderPath + "/Stitched.png")
+        stitched_path = os.path.join(self.outputFolderPath, "Stitched.png")
+        print(stitched_path)
+        new_img.save(stitched_path)
         self.StatusLabel.config(text="Done!")
 
     def run(self):
